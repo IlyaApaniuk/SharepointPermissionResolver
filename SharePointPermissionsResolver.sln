@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1700.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharePointPermissionsResolver", "SharePointPermissionsResolver\SharePointPermissionsResolver.csproj", "{5EE9415E-7987-44E7-B090-4E6DFA1A91EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EE9415E-7987-44E7-B090-4E6DFA1A91EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EE9415E-7987-44E7-B090-4E6DFA1A91EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EE9415E-7987-44E7-B090-4E6DFA1A91EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EE9415E-7987-44E7-B090-4E6DFA1A91EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B108253-0317-441A-94E6-B97A607AFBDA}
+	EndGlobalSection
+EndGlobal
