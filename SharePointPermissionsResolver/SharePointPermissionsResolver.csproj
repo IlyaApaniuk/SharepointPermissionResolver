@@ -8,6 +8,24 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.46.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Controllers\" />
+    <None Remove="Services\" />
+    <None Remove="Microsoft.Identity.Client" />
+    <None Remove="Services\AuthWrapper\" />
+    <None Remove="Services\SharePointService\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\AuthWrapper\" />
+    <Folder Include="Services\SharePointService\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>
