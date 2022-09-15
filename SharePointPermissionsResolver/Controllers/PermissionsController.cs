@@ -49,6 +49,15 @@ namespace SharePointPermissionsResolver.Controllers
         }
 
         [HttpPost]
+        [Route("items/search")]
+        public async Task<string> SearchListItems([FromBody] Request request)
+        {
+            var data = await this.sharePointService.PerformSearch(request);
+
+            return data;
+        }
+
+        [HttpPost]
         [Route("drives/get")]
         public async Task<string> GetDriveItems([FromBody] Request request)
         {

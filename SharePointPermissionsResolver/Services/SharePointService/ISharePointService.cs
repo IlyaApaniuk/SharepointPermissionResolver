@@ -14,6 +14,8 @@ namespace SharePointPermissionsResolver.Services.SharePointService
         public Task<string> GetDriveItems(Request request);
 
         public Task<bool> UploadDriveItem(Request request, IFormFile file);
+
+        public Task<string> PerformSearch(Request request);
     }
 }
 

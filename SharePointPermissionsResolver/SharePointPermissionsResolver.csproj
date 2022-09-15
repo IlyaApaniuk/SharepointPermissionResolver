@@ -20,6 +20,7 @@
     <None Remove="Services\SharePointService\" />
     <None Remove="Newtonsoft.Json" />
     <None Remove="Models\" />
+    <None Remove="Properties\Certifications\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -27,5 +28,6 @@
     <Folder Include="Services\AuthWrapper\" />
     <Folder Include="Services\SharePointService\" />
     <Folder Include="Models\" />
+    <Folder Include="Properties\Certifications\" />
   </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
         {
             try
             {
-                var token = await this.authWrapper.GetToken();
+                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -47,7 +47,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
         {
             try
             {
-                var token = await this.authWrapper.GetToken();
+                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -70,7 +70,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
         {
             try
             {
-                var token = await this.authWrapper.GetToken();
+                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -83,7 +83,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
 
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -93,7 +93,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
         {
             try
             {
-                var token = await this.authWrapper.GetToken();
+                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
                 var siteId = await this.GetSiteId(token, request.RootPath, request.ServerRelativePath);
                 var driveId = await this.GetDriveId(token, siteId, request.DriveName);
 
@@ -117,7 +117,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
         {
             try
             {
-                var token = await this.authWrapper.GetToken();
+                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
                 var siteId = await this.GetSiteId(token, request.RootPath, request.ServerRelativePath);
                 var driveId = await this.GetDriveId(token, siteId, request.DriveName);
 
@@ -134,9 +134,29 @@ namespace SharePointPermissionsResolver.Services.SharePointService
 
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
+            }
+        }
+
+        public async Task<string> PerformSearch(Request request)
+        {
+            try
+            {
+                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken, request.RootPath, false);
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+                var response = await httpClient.GetAsync(request.ApiUrl);
+                var content = await response.Content.ReadAsStringAsync();
+
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return "{ PrimaryQueryResult: { RelevantResults: { Table: { Rows: [] } }}}";
             }
         }
 

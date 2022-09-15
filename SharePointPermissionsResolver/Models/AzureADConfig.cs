@@ -5,9 +5,15 @@ namespace SharePointPermissionsResolver.Models
     {
         public string ClientId { get; set; }
 
-        public string ClientSecret { get; set; }
+        public string CertificatePath { get; set; }
+
+        public string CertificatePassword { get; set; }
 
         public string TenantId { get; set; }
+
+        public string SpfxPass { get; set; }
+
+        public string SpfxToken { get; set; }
     }
 }
 
