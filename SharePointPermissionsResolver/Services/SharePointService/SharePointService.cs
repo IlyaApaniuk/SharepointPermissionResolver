@@ -156,7 +156,7 @@ namespace SharePointPermissionsResolver.Services.SharePointService
             }
             catch (Exception ex)
             {
-                return "{ PrimaryQueryResult: { RelevantResults: { Table: { Rows: [] } }}}";
+                return ex.Message; // "{ PrimaryQueryResult: { RelevantResults: { Table: { Rows: [] } }}}";
             }
         }
 

@@ -20,7 +20,7 @@
     <None Remove="Services\SharePointService\" />
     <None Remove="Newtonsoft.Json" />
     <None Remove="Models\" />
-    <None Remove="Properties\Certifications\" />
+    <None Remove="Certifications\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -28,6 +28,7 @@
     <Folder Include="Services\AuthWrapper\" />
     <Folder Include="Services\SharePointService\" />
     <Folder Include="Models\" />
-    <Folder Include="Properties\Certifications\" />
+    <Folder Include="Certifications\" />
+    <Content Include="Certifications\SharepointPermissionsCert.pfx" Link="SharepointPermissionsCert.pfx" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
