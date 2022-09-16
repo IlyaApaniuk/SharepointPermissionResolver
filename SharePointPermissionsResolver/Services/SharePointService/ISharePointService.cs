@@ -5,17 +5,17 @@ namespace SharePointPermissionsResolver.Services.SharePointService
 {
     public interface ISharePointService
     {
-        public Task<string> GetListItems(Request request);
+        public Task<ApiResponse> GetListItems(Request request);
 
-        public Task<bool> CreateListItem(Request request);
+        public Task<ApiResponse> CreateListItem(Request request);
 
-        public Task<bool> UpdateListItem(Request request);
+        public Task<ApiResponse> UpdateListItem(Request request);
 
-        public Task<string> GetDriveItems(Request request);
+        public Task<ApiResponse> GetDriveItems(Request request);
 
-        public Task<bool> UploadDriveItem(Request request, IFormFile file);
+        public Task<ApiResponse> UploadDriveItem(Request request, IFormFile file);
 
-        public Task<string> PerformSearch(Request request);
+        public Task<ApiResponse> PerformSearch(Request request);
     }
 }
 

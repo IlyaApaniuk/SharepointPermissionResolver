@@ -12,7 +12,7 @@ builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.Configure<List<AzureADConfig>>(builder.Configuration.GetSection("AzureAD"));
+builder.Services.Configure<AzureADConfig>(builder.Configuration.GetSection("AzureAD"));
 builder.Services.AddScoped<IAuthWrapper, AuthWrapper>();
 builder.Services.AddScoped<ISharePointService, SharePointService>();
 

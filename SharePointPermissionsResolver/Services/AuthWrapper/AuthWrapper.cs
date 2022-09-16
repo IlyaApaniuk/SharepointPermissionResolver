@@ -7,22 +7,22 @@ namespace SharePointPermissionsResolver.Services.AuthWrapper
 {
     public class AuthWrapper: IAuthWrapper
     {
-        private readonly List<AzureADConfig> azureAdConfig;
+        private readonly AzureADConfig azureAdConfig;
 
-        public AuthWrapper(IOptions<List<AzureADConfig>> config)
+        public AuthWrapper(IOptions<AzureADConfig> config)
         {
             this.azureAdConfig = config.Value;
         }
 
-        public async Task<string> GetToken(string spfxPass, string spfxToken, string rootPath = "", bool forGraph = true)
+        public async Task<string> GetToken(string spfxToken, string rootPath = "", bool forGraph = true)
         {
             try
             {
-                var config = this.GetAzureADConfigForEnvironment(spfxPass, spfxToken);
-                var app = ConfidentialClientApplicationBuilder.Create(config?.ClientId).WithCertificate(this.GetCertificate(config)).Build();
-                var scopes = new[] { forGraph ? "https://graph.microsoft.com/.default" : "https://85458q.sharepoint.com/.default" };
+                var environment = this.GetAzureADConfigForEnvironment(spfxToken);
+                var app = ConfidentialClientApplicationBuilder.Create(this.azureAdConfig?.ClientId).WithCertificate(this.GetCertificate(this.azureAdConfig)).Build();
+                var scopes = new[] { forGraph ? "https://graph.microsoft.com/.default" : $"https://{rootPath}/.default" };
                 var authResult = await app.AcquireTokenForClient(scopes)
-                    .WithAuthority(AzureCloudInstance.AzurePublic, config?.TenantId)
+                    .WithAuthority(AzureCloudInstance.AzurePublic, environment?.TenantId)
                     .ExecuteAsync();
 
                 return authResult.AccessToken;
@@ -33,11 +33,11 @@ namespace SharePointPermissionsResolver.Services.AuthWrapper
             }
         }
 
-        private AzureADConfig? GetAzureADConfigForEnvironment(string spfxPass, string spfxToken)
+        private ClientEnvironment? GetAzureADConfigForEnvironment(string spfxToken)
         {
-            var config = this.azureAdConfig.Where(c => c.SpfxPass == spfxPass && c.SpfxToken == spfxToken).FirstOrDefault();
+            var environment = this.azureAdConfig.Environments.Where(c => c.SpfxToken == spfxToken).FirstOrDefault();
 
-            return config;
+            return environment;
         }
 
         private X509Certificate2 GetCertificate(AzureADConfig? config)

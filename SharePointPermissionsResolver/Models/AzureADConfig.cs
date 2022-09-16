@@ -9,9 +9,12 @@ namespace SharePointPermissionsResolver.Models
 
         public string CertificatePassword { get; set; }
 
-        public string TenantId { get; set; }
+        public List<ClientEnvironment> Environments { get; set; }
+    }
 
-        public string SpfxPass { get; set; }
+    public class ClientEnvironment
+    {
+        public string TenantId { get; set; }
 
         public string SpfxToken { get; set; }
     }

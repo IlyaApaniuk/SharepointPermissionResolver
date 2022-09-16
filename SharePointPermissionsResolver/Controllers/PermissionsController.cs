@@ -23,57 +23,99 @@ namespace SharePointPermissionsResolver.Controllers
 
         [HttpPost]
         [Route("items/get")]
-        public async Task<string> GetListItems([FromBody] Request request)
+        public async Task<IActionResult> GetListItems([FromBody] Request request)
         {
-            var data = await this.sharePointService.GetListItems(request);
+            try
+            {
+                var response = await this.sharePointService.GetListItems(request);
 
-            return data;
+                return response.IsSuccessed ? Ok(response.Content) : BadRequest(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("items/create")]
         public async Task<IActionResult> CreateListItem([FromBody] Request request)
         {
-            var isCreated = await this.sharePointService.CreateListItem(request);
+            try
+            {
+                var response = await this.sharePointService.CreateListItem(request);
 
-            return isCreated ? Ok(isCreated) : StatusCode(500);
+                return response.IsSuccessed ? Ok(true) : BadRequest(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("items/update")]
         public async Task<IActionResult> UpdateListItem([FromBody] Request request)
         {
-            var isUpdated = await this.sharePointService.UpdateListItem(request);
+            try
+            {
+                var response = await this.sharePointService.UpdateListItem(request);
 
-            return isUpdated ? Ok(isUpdated) : StatusCode(500);
+                return response.IsSuccessed ? Ok(true) : BadRequest(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("items/search")]
-        public async Task<string> SearchListItems([FromBody] Request request)
+        public async Task<IActionResult> SearchListItems([FromBody] Request request)
         {
-            var data = await this.sharePointService.PerformSearch(request);
+            try
+            {
+                var response = await this.sharePointService.PerformSearch(request);
 
-            return data;
+                return response.IsSuccessed ? Ok(response.Content) : BadRequest(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("drives/get")]
-        public async Task<string> GetDriveItems([FromBody] Request request)
+        public async Task<IActionResult> GetDriveItems([FromBody] Request request)
         {
-            var data = await this.sharePointService.GetDriveItems(request);
+            try
+            {
+                var response = await this.sharePointService.GetDriveItems(request);
 
-            return data;
+                return response.IsSuccessed ? Ok(response.Content) : BadRequest(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("drives/upload")]
         public async Task<IActionResult> UploadDriveItem(IFormFile file, [FromForm] string request)
         {
-            var requestData = JsonConvert.DeserializeObject<Request>(request);
-            var isUploaded = await this.sharePointService.UploadDriveItem(requestData, file);
+            try
+            {
+                var requestData = JsonConvert.DeserializeObject<Request>(request);
+                var response = await this.sharePointService.UploadDriveItem(requestData, file);
 
-            return isUploaded ? Ok(isUploaded) : StatusCode(500);
+                return response.IsSuccessed ? Ok(true) : BadRequest(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

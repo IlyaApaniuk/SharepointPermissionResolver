@@ -8,7 +8,7 @@ using SharePointPermissionsResolver.Services.AuthWrapper;
 
 namespace SharePointPermissionsResolver.Services.SharePointService
 {
-    public class SharePointService: ISharePointService
+    public class SharePointService : ISharePointService
     {
         private IAuthWrapper authWrapper;
 
@@ -17,11 +17,11 @@ namespace SharePointPermissionsResolver.Services.SharePointService
             this.authWrapper = wrapper;
         }
 
-        public async Task<string> GetListItems(Request request)
+        public async Task<ApiResponse> GetListItems(Request request)
         {
             try
             {
-                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
+                var token = await this.authWrapper.GetToken(request.SpfxToken);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -35,19 +35,19 @@ namespace SharePointPermissionsResolver.Services.SharePointService
                 var fields = json.Value.Select(data => data.Fields).ToList();
                 var listItems = new { value = fields };
 
-                return JsonConvert.SerializeObject(listItems);
+                return new ApiResponse { IsSuccessed = response.IsSuccessStatusCode, Content = JsonConvert.SerializeObject(listItems) };
             }
-            catch
+            catch (Exception ex)
             {
-                return "{ value: [] }";
+                throw new Exception(ex.Message);
             }
         }
 
-        public async Task<bool> CreateListItem(Request request)
+        public async Task<ApiResponse> CreateListItem(Request request)
         {
             try
             {
-                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
+                var token = await this.authWrapper.GetToken(request.SpfxToken);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -57,20 +57,21 @@ namespace SharePointPermissionsResolver.Services.SharePointService
                 var url = request.ApiUrl.Replace("{siteId}", siteId);
 
                 var response = await httpClient.PostAsync(url, requestData);
+                var content = await response.Content.ReadAsStringAsync();
 
-                return response.IsSuccessStatusCode;
+                return new ApiResponse { IsSuccessed = response.IsSuccessStatusCode, Content = content };
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
-        public async Task<bool> UpdateListItem(Request request)
+        public async Task<ApiResponse> UpdateListItem(Request request)
         {
             try
             {
-                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
+                var token = await this.authWrapper.GetToken(request.SpfxToken);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -80,20 +81,21 @@ namespace SharePointPermissionsResolver.Services.SharePointService
                 var url = request.ApiUrl.Replace("{siteId}", siteId);
 
                 var response = await httpClient.PatchAsync(url, requestData);
+                var content = await response.Content.ReadAsStringAsync();
 
-                return response.IsSuccessStatusCode;
+                return new ApiResponse { IsSuccessed = response.IsSuccessStatusCode, Content = content };
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
-        public async Task<string> GetDriveItems(Request request)
+        public async Task<ApiResponse> GetDriveItems(Request request)
         {
             try
             {
-                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
+                var token = await this.authWrapper.GetToken(request.SpfxToken);
                 var siteId = await this.GetSiteId(token, request.RootPath, request.ServerRelativePath);
                 var driveId = await this.GetDriveId(token, siteId, request.DriveName);
 
@@ -105,19 +107,19 @@ namespace SharePointPermissionsResolver.Services.SharePointService
                 var response = await httpClient.GetAsync(url);
                 var content = await response.Content.ReadAsStringAsync();
 
-                return content;
+                return new ApiResponse { IsSuccessed = response.IsSuccessStatusCode, Content = content };
             }
-            catch
+            catch (Exception ex)
             {
-                return "{ value: [] }";
+                throw new Exception(ex.Message);
             }
         }
 
-        public async Task<bool> UploadDriveItem(Request request, IFormFile file)
+        public async Task<ApiResponse> UploadDriveItem(Request request, IFormFile file)
         {
             try
             {
-                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken);
+                var token = await this.authWrapper.GetToken(request.SpfxToken);
                 var siteId = await this.GetSiteId(token, request.RootPath, request.ServerRelativePath);
                 var driveId = await this.GetDriveId(token, siteId, request.DriveName);
 
@@ -131,20 +133,21 @@ namespace SharePointPermissionsResolver.Services.SharePointService
                 var url = request.ApiUrl.Replace("{driveId}", driveId);
 
                 var response = await httpClient.PutAsync(url, fileStreamContent);
+                var content = await response.Content.ReadAsStringAsync();
 
-                return response.IsSuccessStatusCode;
+                return new ApiResponse { IsSuccessed = response.IsSuccessStatusCode, Content = content };
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
-        public async Task<string> PerformSearch(Request request)
+        public async Task<ApiResponse> PerformSearch(Request request)
         {
             try
             {
-                var token = await this.authWrapper.GetToken(request.SpfxPass, request.SpfxToken, request.RootPath, false);
+                var token = await this.authWrapper.GetToken(request.SpfxToken, request.RootPath, false);
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -152,11 +155,11 @@ namespace SharePointPermissionsResolver.Services.SharePointService
                 var response = await httpClient.GetAsync(request.ApiUrl);
                 var content = await response.Content.ReadAsStringAsync();
 
-                return content;
+                return new ApiResponse { IsSuccessed = response.IsSuccessStatusCode, Content = content };
             }
             catch (Exception ex)
             {
-                return ex.Message; // "{ PrimaryQueryResult: { RelevantResults: { Table: { Rows: [] } }}}";
+                throw new Exception(ex.Message);
             }
         }
 
